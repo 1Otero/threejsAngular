@@ -1,7 +1,7 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
 import * as THREE from 'three'
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
-import { DragControls } from 'three/examples/jsm/controls/DragControls'
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import { DragControls } from 'three/examples/jsm/controls/DragControls.js'
 
 @Component({
   selector: 'app-viewthreejstst',
