@@ -3,12 +3,6 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [{
-  path: '',
-  component: HomeComponent
-},{
-  path: 'meviewthree',
-  component: HomeComponent
-},{
   path: 'methreecube',
   loadComponent: () => import("./page/viewthreejstst/viewthreejstst.component").then(c => c.ViewthreejststComponent)
 },{

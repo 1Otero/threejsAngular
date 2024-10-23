@@ -1,9 +1,9 @@
 import { Routes } from '@angular/router';
+import { HomeComponent } from './modules/threejstst/home/home.component';
 
 export const routes: Routes = [{
     path: '',
-    pathMatch: 'full',
-    redirectTo: 'methree'
+    component: HomeComponent
 },{
     path: 'methree',
     loadChildren: () => import("./modules/threejstst/threejstst.module").then(t => t.ThreejststModule)
