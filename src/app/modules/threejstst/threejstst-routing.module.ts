@@ -1,12 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ViewthreejststComponent } from './page/viewthreejstst/viewthreejstst.component' 
 import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [{
   path: '',
-  redirectTo: 'meviewthree',
-  pathMatch: 'full'
+  component: HomeComponent
 },{
   path: 'meviewthree',
   component: HomeComponent
