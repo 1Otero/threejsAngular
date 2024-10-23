@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ViewthreejststComponent } from './viewthreejstst/viewthreejstst.component' 
+import { ViewthreejststComponent } from './page/viewthreejstst/viewthreejstst.component' 
+import { HomeComponent } from './home/home.component';
 
 const routes: Routes = [{
   path: '',
@@ -8,10 +9,13 @@ const routes: Routes = [{
   pathMatch: 'full'
 },{
   path: 'meviewthree',
-  loadComponent: () => import("./viewthreejstst/viewthreejstst.component").then(v => v.ViewthreejststComponent)
+  component: HomeComponent
 },{
-  path: 'methree',
-  component: ViewthreejststComponent
+  path: 'methreecube',
+  loadComponent: () => import("./page/viewthreejstst/viewthreejstst.component").then(c => c.ViewthreejststComponent)
+},{
+  path: 'methreecuberubik',
+  loadComponent: () => import('./page/viewthreejscuborubik/viewthreejscuborubik.component').then(cr => cr.ViewthreejscuborubikComponent)
 }];
 
 @NgModule({

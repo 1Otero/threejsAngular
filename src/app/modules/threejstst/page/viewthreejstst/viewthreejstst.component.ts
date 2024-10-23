@@ -12,6 +12,7 @@ import { DragControls } from 'three/examples/jsm/controls/DragControls'
 })
 export class ViewthreejststComponent implements OnInit{
  @ViewChild("meCanvasRender", {static: true}) meCanvas!:ElementRef<HTMLCanvasElement>
+ @ViewChild("tstsize", { static:true }) metstsize!:ElementRef<HTMLElement>
  private renderer!:THREE.WebGLRenderer;
  private scene!:THREE.Scene;
  private camera!:THREE.PerspectiveCamera;
@@ -30,16 +31,21 @@ export class ViewthreejststComponent implements OnInit{
   this.animateScena()
  }
  private meInitThree(){
+  let el= this.metstsize.nativeElement
+  let height= el.clientHeight
+  let width= el.clientWidth
   this.scene= new THREE.Scene();
   //Fov -> Distancia vista Inicia?
   //Aspect -> Dimensiones entre ancho y alto de la pantalla
   //Near -> 
   //Far ->
   //this.camera= new THREE.PerspectiveCamera(75, this.meWidth / this.meHeight, 0.1, 1000);
-  this.camera= new THREE.PerspectiveCamera(7, (this.meWidth/2) / (this.meHeight/2), 0.1, 1000);
+  //this.camera= new THREE.PerspectiveCamera(7, (this.meWidth/2) / (this.meHeight/2), 0.1, 1000);
+  this.camera= new THREE.PerspectiveCamera(7, (width) / (height), 0.1, 1000);
   this.camera.position.z= 48;
   this.renderer= new THREE.WebGLRenderer({ canvas: this.meCanvas.nativeElement })
-  this.renderer.setSize(this.meWidth, this.meHeight);
+  //this.renderer.setSize(this.meWidth, this.meHeight);
+  this.renderer.setSize(width, height);
   this.orbitControl= new OrbitControls(this.camera, this.renderer.domElement);
   this.orbitControl.enableDamping= true;
   this.orbitControl.dampingFactor= 0.25;
@@ -53,11 +59,24 @@ export class ViewthreejststComponent implements OnInit{
    cube.position.set(0, 0, 0);
    this.scene.add(cube);
    this.objects.push(cube);
-   const ambientLight= new THREE.AmbientLight(0x00ee00);
+   const ambientLight= new THREE.AmbientLight(0xffffff);
+   ambientLight.position.set(-1,1,1)
    this.scene.add(ambientLight);
-   const directionalLight= new THREE.DirectionalLight(0x00ee00, 0.5);
-   directionalLight.position.set(1, 1, 1);
+   const ambientLight1= new THREE.AmbientLight(0xffffff, 2);
+   ambientLight1.position.set(2, 3, 1)
+   this.scene.add(ambientLight1)
+   const directionalLight= new THREE.DirectionalLight(0xffffff, 1);
+   directionalLight.position.set(-2, 2, 2);
    this.scene.add(directionalLight);
+   const directionalLight1= new THREE.DirectionalLight(0xffffff, 1);
+   directionalLight1.position.set(3, -2, 3);
+   this.scene.add(directionalLight1);
+   const pointLight= new THREE.PointLight(0xffffff, 10, 100);
+   pointLight.position.set(1, 1, 1);
+   this.scene.add(pointLight)
+   const pointLight1= new THREE.PointLight(0xffffff, 10, 200)
+   pointLight1.position.set(-2, 2, 3)
+   this.scene.add(pointLight1)
    //this.scene.background= new THREE.Color(0xffffff);
    this.dragControls= new DragControls(this.objects, this.camera, this.renderer.domElement);
    this.dragControls.addEventListener("dragstart", () => this.orbitControl.enabled= false);
@@ -67,12 +86,12 @@ export class ViewthreejststComponent implements OnInit{
  generateCube(){
   const meGeometry= new THREE.BoxGeometry(2, 2, 2);
   const meMaterials= [
-    new THREE.MeshStandardMaterial({ color: 0x00ff00, emissive: 'red', flatShading: false, roughness: 1, metalness: 0.4, envMapIntensity: 0.5}),
-    new THREE.MeshStandardMaterial({ color: 0x00ee00, emissive: "orange" }),
-    new THREE.MeshStandardMaterial({ color: 0x00dd00, emissive: 'black' }),
-    new THREE.MeshStandardMaterial({ color: 0x00cc00, emissive: 'purple' }),
-    new THREE.MeshPhongMaterial({ color: 0x00bb00, emissive: 'blue' }),
-    new THREE.MeshPhongMaterial({ color: 0x00aa00, emissive: 'green' })
+    new THREE.MeshStandardMaterial({ color: 0x00ff00, emissive: 'red', flatShading: true, roughness: 0.3, metalness: 0.3, envMapIntensity: 0.3}),
+    new THREE.MeshStandardMaterial({ color: 0x00ee00, emissive: "orange", flatShading: true, roughness: 0.3, metalness: 0.3, envMapIntensity: 0.3 }),
+    new THREE.MeshStandardMaterial({ color: 0x00dd00, emissive: 'black', flatShading: true, roughness: 0.3, metalness: 0.3, envMapIntensity: 0.3 }),
+    new THREE.MeshStandardMaterial({ color: 0x00cc00, emissive: 'purple', flatShading: true, roughness: 0.3, metalness: 0.3, envMapIntensity: 0.3 }),
+    new THREE.MeshStandardMaterial({ color: 0x00bb00, emissive: 'blue',  flatShading: true, roughness: 0.3, metalness: 0.1, envMapIntensity: 0.3 }),
+    new THREE.MeshPhongMaterial({ color: 0x00aa00, emissive: 'green', flatShading: true})
   ]
   const meCube= new THREE.Mesh(meGeometry, meMaterials);
   for(var i=0; i < meMaterials.length; i++){
@@ -133,11 +152,16 @@ export class ViewthreejststComponent implements OnInit{
  }  
  //resize window
  private meWindowReSize(){ 
+  let el= this.metstsize.nativeElement
+  let height= el.clientHeight
+  let width= el.clientWidth
   //this.camera.aspect= window.innerWidth / window.innerHeight;
-  this.camera.aspect= (window.innerWidth/2) / (window.innerHeight/2);
+  //this.camera.aspect= (window.innerWidth/2) / (window.innerHeight/2);
+  this.camera.aspect= (width) / (height);
   this.camera.updateProjectionMatrix();
-  this.renderer.setSize(window.innerWidth, window.innerHeight);
-  this.renderer.setSize((window.innerWidth / 2), (window.innerHeight / 2));
+  //this.renderer.setSize(window.innerWidth, window.innerHeight);
+  //this.renderer.setSize((window.innerWidth / 2), (window.innerHeight / 2));
+  this.renderer.setSize((width), (height));
  }
  activateGiro(){
   this.isMovil= !this.isMovil;

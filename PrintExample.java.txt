@@ -1,0 +1,132 @@
+import java.awt.*;
+import java.awt.print.*;
+
+// public class PrintExample implements Printable {
+
+//     public static void main(String[] args) {
+//         PrintExample example = new PrintExample();
+//         example.print();
+//     }
+
+//     public void print() {
+//         PrinterJob job = PrinterJob.getPrinterJob();
+//         job.setPrintable(this);
+//         try {
+//             job.print();
+//         } catch (PrinterException e) {
+//             e.printStackTrace();
+//         }
+//     }
+
+//     @Override
+//     public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+//         if (pageIndex > 0) {
+//             return NO_SUCH_PAGE;
+//         }
+
+//         Graphics2D g2d = (Graphics2D) graphics;
+//         g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+
+//         g2d.setFont(new Font("Serif", Font.PLAIN, 12));
+//         g2d.drawString("Hola, esto es una prueba de impresión directa al driver.", 0, 10);
+//         g2d.drawString("Si puedes ver esto en OneNote, ¡la impresión fue exitosa!", 0, 25);
+
+//         return PAGE_EXISTS;
+//     }
+// }
+
+public class PrintExample implements Printable {
+
+    private String printType;
+
+    public static void main(String[] args) {
+        PrintExample example = new PrintExample();
+        //example.printDefault();
+        example.printTicket();
+        //example.printEscarapela();
+    }
+
+    public void printDefault() {
+        printType = "default";
+        print();
+    }
+
+    public void printTicket() {
+        printType = "ticket";
+        print();
+    }
+
+    public void printEscarapela() {
+        printType = "escarapela";
+        print();
+    }
+
+    private void print() {
+        PrinterJob job = PrinterJob.getPrinterJob();
+        PageFormat pf = job.defaultPage();
+        Paper paper = new Paper();
+
+        if (printType.equals("ticket")) {
+            paper.setSize(4 * 72, 12 * 72); // 4cm x 12cm en puntos (1 inch = 72 points)
+            paper.setImageableArea(0, 0, 4 * 72, 12 * 72);
+        } else if (printType.equals("escarapela")) {
+            paper.setSize(6 * 72, 14 * 72); // 6cm x 14cm en puntos
+            paper.setImageableArea(0, 0, 6 * 72, 14 * 72);
+        }
+
+        pf.setPaper(paper);
+        job.setPrintable(this, pf);
+
+        try {
+            job.print();
+        } catch (PrinterException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public int print(Graphics graphics, PageFormat pageFormat, int pageIndex) throws PrinterException {
+        if (pageIndex > 0) {
+            return NO_SUCH_PAGE;
+        }
+
+        Graphics2D g2d = (Graphics2D) graphics;
+        g2d.translate(pageFormat.getImageableX(), pageFormat.getImageableY());
+
+        g2d.setFont(new Font("Serif", Font.PLAIN, 10));
+
+        switch (printType) {
+            case "ticket":
+                printTicketContent(g2d);
+                break;
+            case "escarapela":
+                printEscarapelaContent(g2d);
+                break;
+            default:
+                printDefaultContent(g2d);
+        }
+
+        return PAGE_EXISTS;
+    }
+
+    private void printDefaultContent(Graphics2D g2d) {
+        g2d.drawString("Hola, esto es una prueba de impresión directa al driver.", 0, 10);
+        g2d.drawString("Si puedes ver esto en OneNote, ¡la impresión fue exitosa!", 0, 25);
+    }
+
+    private void printTicketContent(Graphics2D g2d) {
+        g2d.drawString("Ticket de Ejemplo", 10, 20);
+        g2d.drawString("Fecha: " + java.time.LocalDate.now(), 10, 40);
+        g2d.drawString("Número: 12345", 10, 60);
+        g2d.drawString("Válido para: 1 persona", 10, 80);
+    }
+
+    private void printEscarapelaContent(Graphics2D g2d) {
+        g2d.setFont(new Font("Serif", Font.BOLD, 14));
+        g2d.drawString("ESCARAPELA", 50, 30);
+        g2d.setFont(new Font("Serif", Font.PLAIN, 12));
+        g2d.drawString("Nombre: Juan Pérez", 20, 60);
+        g2d.drawString("Cargo: Desarrollador", 20, 80);
+        g2d.drawString("Empresa: TechCorp", 20, 100);
+    }
+}
